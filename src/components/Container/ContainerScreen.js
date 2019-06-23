@@ -24,7 +24,9 @@ import FlatDataUpload from '../DataUpload/FlatDataUpload.js';
 import BuildingDataUpload from '../DataUpload/BuildingDataUpload.js';
 import ActionDrawers from '../ActionDrawers/ActionDrawers.js';
 import VParkingUpload from '../DataUpload/VParkingUpload.js';
-import {Enhancedtable} from '../Ticket/Enhancedtable.js';
+import TicketTable from '../Ticket/TicketTable.js';
+import RaiseFinanceTicket from '../Ticket/RaiseFinanceTicket.js';
+
 
 const drawerWidth = 240;
 
@@ -116,8 +118,11 @@ class ContainerScreen extends React.Component {
         	content = <VParkingUpload/>;
             break;
         case 'ShowAllTickets':
-        	content = <Enhancedtable/>;
+        	content = <TicketTable/>;
         	break;
+        case 'RaiseFinanceTicket':
+        	content = <RaiseFinanceTicket/>;
+        	break;        	
         default:
             content = <About/>;
     }

@@ -25,12 +25,12 @@ class App extends Component {
 	}
 	
 	render() {
-		console.log("render called at App:"+ this.props.isLoggedIn)
+		console.log("render called at App:"+ this.state.isSignedIn)
 		return ( 
 				<Router>
 				<div className="App">
-				<TopNav let signedInValue={this.handleLoginVal}/>				
-				<Home/>
+				<TopNav let signedInValue={this.handleLoginVal}/>	
+				
 				<Footer />
 				</div>
 				</Router>

@@ -96,7 +96,7 @@ class ActionDrawers extends React.Component {
     			</ListItem>
 
     		<ListItem button className={classes.nested}  onClick={() => {
-    			this.setState({ show: 'RaiseTicket' ,openContent: false})
+    			this.setState({ show: 'RaiseFinanceTicket' ,openContent: false})
     			this.props.contentIDValue(this.state.show);
     		}}>
     		<ListItemIcon>
