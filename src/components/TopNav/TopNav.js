@@ -19,7 +19,8 @@ import {
 } from 'reactstrap';
 import Home from '../Home/Home.js';
 import { Link } from 'react-router-dom';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch,NavLink as RRNavLink } from 'react-router-dom';
+import Signup from '../Login/SignUp.js';
 
 class TopNav extends React.Component {
 
@@ -29,11 +30,16 @@ class TopNav extends React.Component {
 		this.state = {
 			isOpen: false,
 			isSignedIn: false,
-			showCarousel: true
+			showCarousel: true,
+			disableLoginLink :false,
+		    disableSignUpLink :false
 		}
 		this.handleLoginData = this.handleLoginData.bind(this)
 		this.gotologin = this.gotologin.bind(this)
-		this.setShowcarousel = this.setShowcarousel.bind(this)
+		this.gotoSignUp = this.gotoSignUp.bind(this)
+		this.setShowcarousel = this.setShowcarousel.bind(this)		
+		this.gotoLogout = this.gotoLogout.bind(this)
+		this.onLoginClick = this.onLoginClick.bind(this)		
 	}
 
 	handleLoginData(data) {
@@ -52,9 +58,28 @@ class TopNav extends React.Component {
 			showCarousel: false
 		})
 	}
-
+	
+	onLoginClick(){
+		console.log("onLoginClick");
+		this.setState({
+			disableLoginLink: true
+		})		
+	}
 	gotologin() {
+		
 		return (<Login let signedInValue={this.handleLoginData} />)
+	}
+
+	gotoSignUp() {		
+		this.state.disableSignUpLink = true
+		this.state.disableLoginLink = false
+		console.log("this.state.disableSignUpLink"+this.state.disableSignUpLink);
+		return (<Signup />)
+	}
+	gotoLogout() {		
+		this.state.isSignedIn=false
+		console.log("isSignedIn value in logout:"+this.state.isSignedIn);
+		return (<Home />)
 	}
 
 	toggle() {
@@ -71,7 +96,7 @@ class TopNav extends React.Component {
 		}
 	}
 	render() {
-
+        console.log("in render:"+this.state.disableLoginLink);
 		return (
 			<div>
 				<Navbar color="light" light expand="md">
@@ -82,19 +107,19 @@ class TopNav extends React.Component {
 
 							<Collapse isOpen={!this.state.isSignedIn} >
 								<NavItem>
-									<NavLink href="/Login" activeclassname={"active"} >Login</NavLink>
+									<NavLink href="/Login" >Login</NavLink>
 								</NavItem>
 							</Collapse>
 
 							<Collapse isOpen={this.state.isSignedIn} >
 								<NavItem>
-									<NavLink disabled  >LoggedIn</NavLink>
+								 <NavLink href="/Logout" activeclassname={"active"}  >Log Out </NavLink>
 								</NavItem>
 							</Collapse>
 
 							<Collapse isOpen={!this.state.isSignedIn} >
 								<NavItem>
-									<NavLink href="/SignIn" >Sign UP</NavLink>
+									<NavLink href="/SignUp" disabled={this.state.disableSignUpLink} >SignUP</NavLink>
 								</NavItem>
 							</Collapse>
 
@@ -114,6 +139,16 @@ class TopNav extends React.Component {
 						component={this.gotologin}
 
 					/>
+					<Route
+						exact path="/SignUp" 
+						component={this.gotoSignUp}
+
+					/>
+					<Route
+						exact path="/Logout"
+						component={this.gotoLogout}
+
+					/>					
 				</Switch>
 
 			</div>

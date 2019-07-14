@@ -26,8 +26,11 @@ import ActionDrawers from '../ActionDrawers/ActionDrawers.js';
 import VParkingUpload from '../DataUpload/VParkingUpload.js';
 import TicketTable from '../Ticket/TicketTable.js';
 import RaiseFinanceTicket from '../Ticket/RaiseFinanceTicket.js';
-
-
+import RaiseHomeServiceTicket from '../Ticket/RaiseHomeServiceTicket.js';
+import HomeTicketTable from '../Ticket/HomeTicketTable.js';
+import VisitorTable from '../Visitors/VisitorTable';
+import AddVisitor from '../Visitors/AddVisitor.js';
+import Neighbours from '../Neighbours/Neighbours.js'
 const drawerWidth = 240;
 
 const styles = theme => ({
@@ -122,7 +125,22 @@ class ContainerScreen extends React.Component {
         	break;
         case 'RaiseFinanceTicket':
         	content = <RaiseFinanceTicket/>;
-        	break;        	
+          break;
+        case 'RaiseHomeServiceTicket' :
+            content = <RaiseHomeServiceTicket/>;
+            break;
+        case 'ShowAllHomeServiceTickets':
+            content = <HomeTicketTable/>;
+            break;
+        case 'ShowAllVisitors':
+            content = <Neighbours/>;
+            break;
+        case 'ShowMyVisitors':
+            content = <VisitorTable/>;
+            break;
+        case 'AddVisitor':
+            content = <AddVisitor/>;
+            break;        	
         default:
             content = <About/>;
     }

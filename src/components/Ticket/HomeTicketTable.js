@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {faTrashAlt,faEdit} from '@fortawesome/free-solid-svg-icons';
 
 
-class TicketTable extends React.Component {
+class HomeTicketTable extends React.Component {
 	
 	constructor(props){		
 		super(props);
@@ -175,4 +175,4 @@ class TicketTable extends React.Component {
 		)
 	}
 }
-export default (TicketTable);
+export default (HomeTicketTable);

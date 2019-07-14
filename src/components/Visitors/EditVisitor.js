@@ -1,10 +1,10 @@
 import React from 'react';
 import Axios from 'axios';
 import Home from '../Home/Home.js';
-import ErrorRaiseTicket from './ErrorRaiseTicket.js';
+import ErrorAddingVisitor from './ErrorAddingVisitor.js';
 import { Button, Form, FormGroup, Label, Input, FormText, DropdownItem, Dropdown, DropdownToggle, DropdownMenu, Col } from 'reactstrap';
 
-export default class RaiseFinanceTicket extends React.Component {
+export default class EditVisitor extends React.Component {
 
 	constructor(props) {
 		super(props);
@@ -98,7 +98,7 @@ export default class RaiseFinanceTicket extends React.Component {
 	render() {
 		if (this.state.isPostSuccess != null) {
 			if (this.state.isPostSuccess == "error") {
-				return <ErrorRaiseTicket />;
+				return <ErrorAddingVisitor />;
 			}
 			return <Home />;
 		}

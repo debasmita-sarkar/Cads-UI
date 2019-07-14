@@ -1,13 +1,13 @@
 
 
 import React from 'react';
-import './DataUpload.css';
+import './Login.css';
 import Axios from 'axios';
-import DataUploadScreen from './DataUploadScreen.js';
-import ErrorDataUpload from './ErrorDataUpload.js';
+import Login from './Login.js';
+import ErrorSignUp from './ErrorSignUp.js';
 import { Button, Form, FormGroup, Label, Input, FormText,DropdownItem,Dropdown, DropdownToggle,DropdownMenu,Col} from 'reactstrap';
-
-export default class UserUploadScreen extends React.Component {
+import {Tooltip } from 'reactstrap';
+export default class SignUp extends React.Component {
 
 	constructor(props){		
 		super(props);
@@ -16,6 +16,7 @@ export default class UserUploadScreen extends React.Component {
 				flats:null,
 				usergroups:null,
 				isPostSuccess:null,
+				tooltipOpen: false,
 				buildings:null,
 				form: {
 					firstName: '',
@@ -25,8 +26,7 @@ export default class UserUploadScreen extends React.Component {
 					phone:'',
 					dateOfBirth:'',
 					userGroup:'',
-					flatId:'',
-					buildingid:''
+					flatId:''
 				}
 
 		}
@@ -34,7 +34,13 @@ export default class UserUploadScreen extends React.Component {
 		this.selectFromOptions = this.selectFromOptions.bind(this);
 		this.changeHandler = this.changeHandler.bind(this);
 		this.formHandler = this.formHandler.bind(this);
-	}
+		this.toggle = this.toggle.bind(this);
+	}	
+  toggle() {
+    this.setState({
+      tooltipOpen: !this.state.tooltipOpen
+    });
+  }
 	
 	selectFromOptions(e) {	   
 	    console.log("Option selected:"+e.target.value);
@@ -47,7 +53,7 @@ export default class UserUploadScreen extends React.Component {
 		e.persist();
 		console.log("e in select:"+e.target.name);		 
 	    let store = this.state;
-	    store.form[e.target.name] = e.target.value;
+	    store.form["flatId"] = e.target.innerText;
 	    this.setState(store);
 	  }
 
@@ -73,14 +79,15 @@ export default class UserUploadScreen extends React.Component {
     	   console.log(response.status);                       
        })
        .catch(error =>{
-    	   this.setState({isPostSuccess:"error"});
+    	   this.setState({isPostSuccess:"no"});
     	   console.log(error);			       
     	   //Perform action based on error
        })
 	}
 
 	componentDidMount(){
-		Axios.get('http://localhost:8080/flats',
+
+		Axios.get('http://localhost:8080/flatnumbers',
 				{
 			headers: { 
 				'content-type' : 'application/json',
@@ -111,25 +118,17 @@ export default class UserUploadScreen extends React.Component {
 					console.log("buildings:"+res+":"+res.name+":"+res.floors);
 					this.setState({buildings:res.data});					
 				})
-				.catch(err => console.log(err));		
+				.catch(err => console.log(err));	
+
 	}
-	
-	render() {		
+
+	render() {
+		
 		if(this.state.isPostSuccess !=null){
 			if(this.state.isPostSuccess == "error" ){
-				return <ErrorDataUpload/>;
+				return <ErrorSignUp/>;
 			}
-			return <DataUploadScreen/>;
-		}
-		let buildingselections = "";
-		if(this.state.buildings !=null){
-			buildingselections = this.state.buildings.map((item)=> 
-			{	
-				return <DropdownItem name = "buildingid" value = {item.id} onClick={this.selectFromDrpDown}>{item.name}</DropdownItem>
-
-			});
-		} else{
-			buildingselections = <DropdownItem>Oops !!! Building details not yet uploaded.</DropdownItem>
+			return <Login/>;
 		}
 		
 		let selectedOption = null;
@@ -137,7 +136,7 @@ export default class UserUploadScreen extends React.Component {
 		if(this.state.flats !=null){
 			flatSelections = this.state.flats.map((item)=> 
 			{	
-				return <DropdownItem name = "flatId" value = {item.id} onClick={this.selectFromDrpDown}>{item.number}</DropdownItem>
+				return <DropdownItem onClick={this.selectFromDrpDown}>{item}</DropdownItem>
 
 			});
 		} else{
@@ -154,10 +153,21 @@ export default class UserUploadScreen extends React.Component {
 			userGroups = <option>No usergroups available.</option>
 		}
 
+		let buildingselections = "";
+		if(this.state.buildings !=null){
+			buildingselections = this.state.buildings.map((item)=> 
+			{	
+				return <DropdownItem name = {item.floors} value = {item.id} onClick={this.selectFromDrpDown}>{item.name}</DropdownItem>
+
+			});
+		} else{
+			buildingselections = <DropdownItem>Oops !!! Building details not yet uploaded.</DropdownItem>
+		}
+
 		return (	    
 				<Form style={{backgroundColor: '#cfe8fc'}}>
 				<FormGroup row>
-				<Label  sm={12} for="UserdataUpload">Upload user details</Label>	         
+				<Label  sm={12} for="UserdataUpload">Sign Up</Label>	         
 				</FormGroup>
 				<FormGroup row>
 				<Label sm={2} for="firstname">FirstName</Label>
@@ -231,19 +241,26 @@ export default class UserUploadScreen extends React.Component {
 				</FormGroup> 
 
 				<FormGroup row>
-				<Label sm={2} for="exampleSelect">User Group</Label>
+				<Label sm={2} for="usergroup">User Group</Label>
 				<Col sm={10}>
 				<Input type="select" name="userGroup" id="selectusergroup" ref="groupType" onChange={this.selectFromOptions}>
 				{userGroups}	         
 				</Input>
 				</Col>
-				</FormGroup>			
+				</FormGroup>
 
 				<FormGroup row>
 				<Col sm={2}>
 				<Dropdown direction="right" name="buildingID" isOpen={this.state.buildingdropright} toggle={() => { this.setState({ buildingdropright: !this.state.buildingdropright }); } } >
 				<DropdownToggle caret style={{backgroundColor: '#f18973'}}>				
-				Choose your building
+				<span>
+        		<Button id={'Tooltip-Flat'} style={{backgroundColor: '#f18973'}}>
+          			Choose your building
+        		</Button>
+        		<Tooltip placement="top" style={{backgroundColor: '#f18973'}} isOpen={this.state.tooltipOpen} target={'Tooltip-Flat'} toggle={this.toggle}>
+          				Tooltip Content!
+        		</Tooltip>
+      			</span>
 				</DropdownToggle>
 				<DropdownMenu>
 				{buildingselections}
@@ -255,13 +272,21 @@ export default class UserUploadScreen extends React.Component {
 				<Col sm={2}>
 				<Dropdown direction="right" name="flatId" isOpen={this.state.btnDropright} toggle={() => { this.setState({ btnDropright: !this.state.btnDropright }); } } >
 				<DropdownToggle caret style={{backgroundColor: '#f18973'}}>
-				Choose your flat
+				<span>
+        		<Button id={'Tooltip-Flat'} style={{backgroundColor: '#f18973'}}>
+          			Choose your flat
+        		</Button>
+        		<Tooltip placement="top" style={{backgroundColor: '#f18973'}} isOpen={this.state.tooltipOpen} target={'Tooltip-Flat'} toggle={this.toggle}>
+          				Tooltip Content!
+        		</Tooltip>
+      			</span>
 				</DropdownToggle>
 				<DropdownMenu>
 				{flatSelections}
 				</DropdownMenu>
 				</Dropdown></Col>
 				</FormGroup>
+								
 				<Button onClick={(e) =>
 				this.formHandler(e)} type="submit">Submit</Button>
 				</Form>	      

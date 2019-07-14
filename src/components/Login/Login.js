@@ -105,7 +105,7 @@ class Login extends React.Component {
 			console.log("in signed in value null in login");
 			return (
 				<Container className="App1">
-					<h2>Sign In</h2>
+					<h2>Log In</h2>
 					<Form className="form" >
 						<Col >
 							<FormGroup>

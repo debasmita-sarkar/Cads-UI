@@ -4,7 +4,7 @@ import Home from '../Home/Home.js';
 import ErrorRaiseTicket from './ErrorRaiseTicket.js';
 import { Button, Form, FormGroup, Label, Input, FormText, DropdownItem, Dropdown, DropdownToggle, DropdownMenu, Col } from 'reactstrap';
 
-export default class RaiseFinanceTicket extends React.Component {
+export default class EditFinanceTicket extends React.Component {
 
 	constructor(props) {
 		super(props);

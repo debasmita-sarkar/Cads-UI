@@ -3,12 +3,12 @@ import BootstrapTable from 'react-bootstrap-table-next';
 import {Form,FormGroup, Label,Col} from 'reactstrap';
 import { BrowserRouter as Router,Link,Redirect,Route, Switch,withRouter } from 'react-router-dom';
 import Axios from 'axios';
-import EditFinanceTicket from './EditFinanceTicket.js';
+import EditVisitor from './EditVisitor.js';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {faTrashAlt,faEdit} from '@fortawesome/free-solid-svg-icons';
 
 
-class TicketTable extends React.Component {
+class VisitorTable extends React.Component {
 	
 	constructor(props){		
 		super(props);
@@ -53,12 +53,14 @@ class TicketTable extends React.Component {
 		const responseLength = response.data.length;
 		for (let i = 0; i < responseLength; i++) {
 		    this.state.products.push({
-		      id: response.data[i].id,
-		      description: response.data[i].description,
-		      state: response.data[i].state,
-		      ticketType:response.data[i].ticketType,
-		      userId:response.data[i].userId,
-		      workerId:response.data[i].workerId
+		      id: response.data[i].name,
+		      description: response.data[i].phone,
+		      state: response.data[i].flatNumber,
+		      ticketType:response.data[i].buildingName,
+		      userId:response.data[i].purpose,
+			  workerId:response.data[i].timeIn,
+			  workerId:response.data[i].timeOut,
+			  workerId:response.data[i].parking,
 		      
 		    });
 		  }
@@ -72,7 +74,7 @@ class TicketTable extends React.Component {
 		console.log("In colFormatter:");
 		return (
 			<div>
-		  <Link to='/EditOneTicket'>
+		  <Link to='/EditVisitor'>
 			{this.state.cell}
 		  </Link>
 		  
@@ -101,26 +103,34 @@ class TicketTable extends React.Component {
 				  };
 		
 		const columns = [{
-			  dataField: 'id',
-			  text: 'Product ID'
+			  dataField: 'name',
+			  text: 'Name'
 			}, {
-			  dataField: 'description',
-			  text: 'Ticket Description'
+			  dataField: 'phone',
+			  text: 'Phone number'
 			}, {
-			  dataField: 'state',
-			  text: 'Current state'
+			  dataField: 'flatno',
+			  text: 'Flat number'
 			}, {
-				  dataField: 'ticketType',
-				  text: 'Ticket raised for'
+				  dataField: 'buildingname',
+				  text: 'Building Name'
 				},
 				{
-					  dataField: 'userId',
-					  text: 'Submitted By'
+					  dataField: 'purpose',
+					  text: 'Purpose'
 				},
 				{
-					  dataField: 'workerId',
-					  text: 'Owned By'
+					  dataField: 'timeIn',
+					  text: 'Time in'
 				},
+				{
+					dataField: 'timeOut',
+					text: 'Time Out'
+			  },
+			  {
+				dataField: 'parking',
+				text: 'Parking slot allocated'
+		  },
 				{ dataField: "edit", 
 			        text: "Edit",
 			        sort: false,
@@ -164,7 +174,7 @@ class TicketTable extends React.Component {
 				<Router>
 					<switch>
 		  <Route
-		  exact path="/EditOneTicket" render={(props)=><EditFinanceTicket {...props} ticketid={this.state.ticketid}/>}
+		  exact path="/EditVisitor" render={(props)=><EditVisitor {...props} ticketid={this.state.ticketid}/>}
 		  />
 		  </switch>		
 		  </Router>
@@ -175,4 +185,4 @@ class TicketTable extends React.Component {
 		)
 	}
 }
-export default (TicketTable);
+export default (VisitorTable);
