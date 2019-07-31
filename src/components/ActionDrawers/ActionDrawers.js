@@ -14,7 +14,7 @@ import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {faBuilding,faPeopleCarry,faCoins,faUsers,faParking,faCity,faClipboardList,faUserCheck,faDungeon} from '@fortawesome/free-solid-svg-icons';
+import {faBuilding,faPeopleCarry,faCoins,faUsers,faParking,faCity,faClipboardList,faUserCheck,faDungeon,faChalkboardTeacher} from '@fortawesome/free-solid-svg-icons';
 
 
 const styles = theme => ({
@@ -37,7 +37,8 @@ class ActionDrawers extends React.Component {
 				    open: false,
 				    openFinance:false,
 				    openVisitors:false,
-				    openHomeService:false
+					openHomeService:false,
+					openConnect:false
 				  };		
 		 this.decideContent = this.decideContent.bind(this)
 		 this.handleClick = this.handleClick.bind(this)		 
@@ -88,17 +89,16 @@ class ActionDrawers extends React.Component {
     		<ListItemIcon>
     		<FontAwesomeIcon icon={faClipboardList} />
     		</ListItemIcon>
-    		<ListItemText inset primary="Show All Tickets" />
+    		<ListItemText inset primary="Finance related Tickets" />
     			</ListItem>
-
-    		<ListItem button className={classes.nested}  onClick={() => {
-    			this.setState({ show: 'RaiseFinanceTicket' ,openContent: false})
+			<ListItem button className={classes.nested}  onClick={() => {
+    			this.setState({ show: 'Audit' ,openContent: false})
     			this.props.contentIDValue(this.state.show);
     		}}>
     		<ListItemIcon>
-    		<FontAwesomeIcon icon={faBuilding} />
+    		<FontAwesomeIcon icon={faChalkboardTeacher} />
     		</ListItemIcon>
-    		<ListItemText inset primary="Raise Ticket" />
+    		<ListItemText inset primary="Audit Documents" />
     		</ListItem>
     		</List>
     		</Collapse>
@@ -123,17 +123,7 @@ class ActionDrawers extends React.Component {
     		<ListItemIcon>
     		<FontAwesomeIcon icon={faClipboardList} />
     		</ListItemIcon>
-    		<ListItemText inset primary="Show All Tickets" />
-    			</ListItem>
-
-    		<ListItem button className={classes.nested}  onClick={() => {
-    			this.setState({ show: 'RaiseHomeServiceTicket' ,openContent: false})
-    			this.props.contentIDValue(this.state.show);
-    		}}>
-    		<ListItemIcon>
-    		<FontAwesomeIcon icon={faBuilding} />
-    		</ListItemIcon>
-    		<ListItemText inset primary="Raise Ticket" />
+    		<ListItemText inset primary="Show Home Service Tickets" />
     		</ListItem>
     		</List>
     		</Collapse>
@@ -155,7 +145,7 @@ class ActionDrawers extends React.Component {
     			this.props.contentIDValue(this.state.show);
     		}}>
     		<ListItemIcon>
-    		<img src='visitor.png'alt="" width="30" height="20" />
+    		<img src='myvisitoricon.png'alt="" width="30" height="20" />
     		</ListItemIcon>
     		<ListItemText inset primary="Show my visitors" />
     		</ListItem>
@@ -169,15 +159,40 @@ class ActionDrawers extends React.Component {
     		</ListItemIcon>
     		<ListItemText inset primary="Show all visitors" />
     		</ListItem>
+    		</List>
+    		</Collapse>
 
-    		<ListItem button className={classes.nested}  onClick={() => {
-    			this.setState({ show: 'AddVisitor' ,openContent: false})
+			<ListItem button  onClick={() => {
+				this.setState({ show: 'Connect' ,openContent: false,openConnect:!this.state.openConnect})
     			this.props.contentIDValue(this.state.show);
     		}}>
     		<ListItemIcon>
-    		<FontAwesomeIcon icon={faUserCheck} />
+			<FontAwesomeIcon icon={faDungeon} />
     		</ListItemIcon>
-    		<ListItemText inset primary="Add visitor" />
+    		<ListItemText inset primary="Connect .." />
+			{this.state.openConnect ? <ExpandLess /> : <ExpandMore />}
+    		</ListItem>
+				<Collapse in={this.state.openConnect} timeout="auto" unmountOnExit>
+    		<List component="div" disablePadding>
+
+    		<ListItem button className={classes.nested}  onClick={() => {
+    			this.setState({ show: 'Neighbours' ,openContent: false})
+    			this.props.contentIDValue(this.state.show);
+    		}}>
+    		<ListItemIcon>
+    		<img src='myvisitoricon.png'alt="" width="30" height="20" />
+    		</ListItemIcon>
+    		<ListItemText inset primary="Neighbours" />
+    		</ListItem>
+
+			<ListItem button className={classes.nested}  onClick={() => {
+    			this.setState({ show: 'childlock' ,openContent: false})
+    			this.props.contentIDValue(this.state.show);
+    		}}>
+    		<ListItemIcon>
+    		<img src='visitor.png'alt="" width="30" height="20" />
+    		</ListItemIcon>
+    		<ListItemText inset primary="Child Lock" />
     		</ListItem>
     		</List>
     		</Collapse> 

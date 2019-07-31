@@ -19,6 +19,7 @@ class Login extends React.Component {
 		this.state = {
 			'email': '',
 			'password': '',
+			loggedinUser:null,
 			isSignedIn: null,
 			validate: {
 				emailState: '',
@@ -69,13 +70,25 @@ class Login extends React.Component {
 				userName: this.state.email,
 				password: this.state.password
 			}
-		}).then(response => {
-			this.props.signedInValue(response.data);
-			this.setState({
-				isSignedIn: response.data
-			})
-
-			console.log(response.data);
+		}).then(response => {			
+			if(response == null || response.data == null ){
+				this.props.signedInValue(false);
+			    this.setState({
+				   isSignedIn: false
+			    })
+		    }
+			else{
+			   this.props.signedInValue(true);
+			   this.setState({				
+				loggedinUser: response.data
+			   })
+			   this.setState({
+				isSignedIn: true				
+			   })			  
+			   console.log("inside login: response:"+ response.data.flatId);
+			   console.log("inside login: user:"+ this.state.loggedinUser.flatId);
+		    }
+		
 		})
 			.catch(error => {
 				this.setState({
@@ -89,11 +102,11 @@ class Login extends React.Component {
 	render() {
 
 		const { email, password } = this.state;
-		if (this.state.isSignedIn == true) {
-			console.log("in signed in value true in login");
+		if (this.state.isSignedIn === true) {
+			console.log("signed in value true in login"+this.state.loggedinUser.flatId);
 			return (
 				<div>
-					<ContainerScreen />
+					<ContainerScreen loggeduser={this.state.loggedinUser}/>
 				</div>);
 		} else if (this.state.isSignedIn == false) {
 			console.log("in signed in value false in login");

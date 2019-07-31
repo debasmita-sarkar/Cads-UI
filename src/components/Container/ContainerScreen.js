@@ -2,21 +2,10 @@ import React from 'react';
 import './Container.css';
 import About from './About.js';
 import PropTypes from 'prop-types';
-import AppBar from '@material-ui/core/AppBar';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Divider from '@material-ui/core/Divider';
 import Drawer from '@material-ui/core/Drawer';
 import Hidden from '@material-ui/core/Hidden';
-import IconButton from '@material-ui/core/IconButton';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import MailIcon from '@material-ui/icons/Mail';
-import MenuIcon from '@material-ui/icons/Menu';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 import DataUploadScreen from '../DataUpload/';
 import UserUploadScreen from '../DataUpload/UserUploadScreen.js';
@@ -24,13 +13,12 @@ import FlatDataUpload from '../DataUpload/FlatDataUpload.js';
 import BuildingDataUpload from '../DataUpload/BuildingDataUpload.js';
 import ActionDrawers from '../ActionDrawers/ActionDrawers.js';
 import VParkingUpload from '../DataUpload/VParkingUpload.js';
-import TicketTable from '../Ticket/TicketTable.js';
-import RaiseFinanceTicket from '../Ticket/RaiseFinanceTicket.js';
-import RaiseHomeServiceTicket from '../Ticket/RaiseHomeServiceTicket.js';
-import HomeTicketTable from '../Ticket/HomeTicketTable.js';
-import VisitorTable from '../Visitors/VisitorTable';
-import AddVisitor from '../Visitors/AddVisitor.js';
-import Neighbours from '../Neighbours/Neighbours.js'
+import FinanceTicketTable from '../Ticket/FinanceTicketTable.js';
+import HomeServiceTicketTable from '../Ticket/HomeServiceTicketTable.js';
+import VisitorTable from '../Visitors/VisitorTable1';
+import AllNeighbours from '../Connect/AllNeighbours.js';
+import MyChildlock from '../Connect/MyChildlock.js';
+import Connect from '../Connect/Connect.js';
 const drawerWidth = 240;
 
 const styles = theme => ({
@@ -95,9 +83,10 @@ class ContainerScreen extends React.Component {
 	  }
   
   render() {
-    const { classes, theme } = this.props;
-    let content = null;
-    console.log("this.state.show"+this.state.show);
+    const { classes, theme} = this.props;   
+    let content = null; 
+    const user = this.props.loggeduser;
+    console.log("user:"+user.flatId);   
     switch(this.state.show) {
         case 'Finance':
         	content = <h1>Finance management Page- In Progress</h1>;
@@ -109,38 +98,44 @@ class ContainerScreen extends React.Component {
             content = <DataUploadScreen/>;
             break;
         case 'UserUpload':
-        	content = <UserUploadScreen/>;
+        	content = <UserUploadScreen loggeduser={user}/>;
             break;
         case 'FlatDataUpload':
-        	content = <FlatDataUpload/>;
+        	content = <FlatDataUpload loggeduser={user}/>;
             break;
         case 'BuildingDataUpload':
-        	content = <BuildingDataUpload/>;
+        	content = <BuildingDataUpload loggeduser={user}/>;
             break;
         case 'VParkingUpload':
-        	content = <VParkingUpload/>;
+        	content = <VParkingUpload loggeduser={user}/>;
             break;
         case 'ShowAllTickets':
-        	content = <TicketTable/>;
-        	break;
-        case 'RaiseFinanceTicket':
-        	content = <RaiseFinanceTicket/>;
-          break;
-        case 'RaiseHomeServiceTicket' :
-            content = <RaiseHomeServiceTicket/>;
+        	content = <FinanceTicketTable loggeduser={user}/>;
+        	break;        
+        case 'ShowMyTickets' :
+            content = <FinanceTicketTable loggeduser={user}/>;
             break;
         case 'ShowAllHomeServiceTickets':
-            content = <HomeTicketTable/>;
+            content = <HomeServiceTicketTable loggeduser={user}/>;
             break;
-        case 'ShowAllVisitors':
-            content = <Neighbours/>;
+        case 'ShowMyHomeServiceTickets':
+            content = <HomeServiceTicketTable loggeduser={user}/>;
             break;
         case 'ShowMyVisitors':
-            content = <VisitorTable/>;
+              content = <VisitorTable loggeduser={user}/>;
+              break;
+        case 'ShowAllVisitors':
+              content = <VisitorTable loggeduserData={user}/>;
+              break;
+       case 'Connect':
+           content = <Connect/>;
             break;
-        case 'AddVisitor':
-            content = <AddVisitor/>;
-            break;        	
+        case 'Neighbours':
+            content = <AllNeighbours />;
+            break;
+            case 'childlock':
+              content = <MyChildlock value={user}/>;
+              break; 
         default:
             content = <About/>;
     }

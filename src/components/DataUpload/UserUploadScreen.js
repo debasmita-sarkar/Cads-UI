@@ -1,8 +1,7 @@
-
-
 import React from 'react';
 import './DataUpload.css';
 import Axios from 'axios';
+import Collapse from '@material-ui/core/Collapse';
 import DataUploadScreen from './DataUploadScreen.js';
 import ErrorDataUpload from './ErrorDataUpload.js';
 import { Button, Form, FormGroup, Label, Input, FormText,DropdownItem,Dropdown, DropdownToggle,DropdownMenu,Col} from 'reactstrap';
@@ -17,14 +16,19 @@ export default class UserUploadScreen extends React.Component {
 				usergroups:null,
 				isPostSuccess:null,
 				buildings:null,
+				checkIfNotOwner:false,
 				form: {
 					firstName: '',
 					lastName: '',
+					middlename:'',
 					email: '',
 					password:'',
 					phone:'',
 					dateOfBirth:'',
 					userGroup:'',
+					isOwner:true,
+					ownerName:'',
+					ownerPhone:'',
 					flatId:'',
 					buildingid:''
 				}
@@ -36,11 +40,24 @@ export default class UserUploadScreen extends React.Component {
 		this.formHandler = this.formHandler.bind(this);
 	}
 	
-	selectFromOptions(e) {	   
-	    console.log("Option selected:"+e.target.value);
+	selectFromOptions(e) {
+		e.persist();	   
+	    console.log("Option selected:"+e.target.name+ e.target.value);
 	    let store = this.state;
-	    store.form["userGroup"] = e.target.value;
-	    this.setState(store);
+	    store.form[e.target.name] = e.target.value;
+		this.setState(store);
+		if(e.target.name === 'isOwner'){
+			if(e.target.value === 'true' ){
+			console.log("isOwner selected as :"+e.target.value);
+			console.log("owner name from store :"+store.form.email+":"+store.form["email"]);
+			this.setState({ checkIfNotOwner: false });
+			store.form["ownerName"] =store.form.email;
+			store.form["ownerPhone"] = store.form.phone;
+			this.setState(store);			
+			}else if (e.target.value === 'false'){
+				this.setState({ checkIfNotOwner: true });
+			}
+		}
 	  }
 	
 	selectFromDrpDown(e) {	
@@ -125,7 +142,7 @@ export default class UserUploadScreen extends React.Component {
 		if(this.state.buildings !=null){
 			buildingselections = this.state.buildings.map((item)=> 
 			{	
-				return <DropdownItem name = "buildingid" value = {item.id} onClick={this.selectFromDrpDown}>{item.name}</DropdownItem>
+				return <DropdownItem name = "buildingid" value = {item.id} onClick={this.selectFromOptions}>{item.name}</DropdownItem>
 
 			});
 		} else{
@@ -137,7 +154,7 @@ export default class UserUploadScreen extends React.Component {
 		if(this.state.flats !=null){
 			flatSelections = this.state.flats.map((item)=> 
 			{	
-				return <DropdownItem name = "flatId" value = {item.id} onClick={this.selectFromDrpDown}>{item.number}</DropdownItem>
+				return <DropdownItem name = "flatId" value = {item.id} onClick={this.selectFromOptions}>{item.number}</DropdownItem>
 
 			});
 		} else{
@@ -178,6 +195,18 @@ export default class UserUploadScreen extends React.Component {
 					name="lastName"
 						id="lastname"
 							placeholder="Your last name" onChange={this.changeHandler}
+								/>
+								</Col>
+				</FormGroup>
+
+				<FormGroup row>
+				<Label sm={2} for="middleName">MiddleName</Label>
+				<Col sm={10}>
+				<Input
+				type="text"
+					name="middleName"
+						id="middleName"
+							placeholder="Your middle name" onChange={this.changeHandler}
 								/>
 								</Col>
 				</FormGroup>
@@ -234,11 +263,46 @@ export default class UserUploadScreen extends React.Component {
 				<Label sm={2} for="exampleSelect">User Group</Label>
 				<Col sm={10}>
 				<Input type="select" name="userGroup" id="selectusergroup" ref="groupType" onChange={this.selectFromOptions}>
+				<option>Choose from below options</option>
 				{userGroups}	         
 				</Input>
 				</Col>
-				</FormGroup>			
+				</FormGroup>
 
+				<FormGroup row>
+					<Label sm={2} for="isOwner">Are you owner of the flat?</Label>
+					<Col sm={10}>
+						<Input type="select" name="isOwner" id="isOwner" ref="isOwner" onChange={this.selectFromOptions}>
+						<option>Choose from below options</option>
+						<option>true</option>
+						<option>false</option>
+						</Input>
+					</Col>
+				</FormGroup>
+				<Collapse in={this.state.checkIfNotOwner} timeout="auto" unmountOnExit>			
+                <FormGroup row>
+				<Label sm={2} for="ownerEmail">Owner's Email Address</Label>
+				<Col sm={10}>
+				<Input
+				type="ownerName"
+					name="ownerName"
+						id="ownerName"
+							placeholder="Flat owner's email address" onChange={this.changeHandler}
+								/>
+								</Col>
+				</FormGroup>
+				<FormGroup row>
+				<Label sm={2} for="ownerPhone">Email</Label>
+				<Col sm={10}>
+				<Input
+				type="ownerPhone"
+					name="ownerPhone"
+						id="ownerPhone"
+							placeholder="Flat owner's phone number" onChange={this.changeHandler}
+								/>
+								</Col>
+				</FormGroup>
+				</Collapse>
 				<FormGroup row>
 				<Col sm={2}>
 				<Dropdown direction="right" name="buildingID" isOpen={this.state.buildingdropright} toggle={() => { this.setState({ buildingdropright: !this.state.buildingdropright }); } } >

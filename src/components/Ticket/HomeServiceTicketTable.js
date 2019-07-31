@@ -19,8 +19,8 @@ import Remove from '@material-ui/icons/Remove';
 import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
-import ErrorAddingVisitor from './ErrorAddingVisitor';
-import ErrorRemovingVisitor from './ErrorRemovingVisitor';
+import ErrorRemovingTicket from './ErrorRemovingTicket';
+import ErrorRaiseTicket from './ErrorRaiseTicket';
 import Home from '../Home';
 
 const tableIcons = {
@@ -43,41 +43,40 @@ ThirdStateCheck: forwardRef((props, ref) => <Remove {...props} ref={ref} />),
 ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
 };
 
-export default function MaterialTableDemo() { 
+export default function HomeServiceTicketTable() { 
   const [data, setDataValues] = useState([]);
   const [columns, setStateValues] = useState([]);
   const [isPostSuccess, setStatus] = useState(null);
 
   React.useEffect(() => {
     console.log("In useEffect");
-  Axios.get('http://localhost:8080/visitors/columns',
+  Axios.get('http://localhost:8080/tickets/columns?ticketcategory=homeservice',
   {
 headers: { 
   'content-type' : 'application/json',
 },	    
   }).then(res => { 
-    console.log("cols:"+res.data);   
-    //setStateValues(res.data); 
+    console.log("cols:"+res.data);
+    setStateValues(res.data); 
   })
   .catch(err => console.log(err)); 
 
-  Axios.get('http://localhost:8080/visitors',
+  Axios.get('http://localhost:8080/tickets',
       {
     headers: { 
       'content-type' : 'application/json',
     },	    
       }).then(res => {
-        console.log("visitors:"+res.data[0].id);
-        //this.setState({products:res.data});
+        console.log("home tickets:"+res.data[0].id);        
         addProducts(res);					
       })
       .catch(err => console.log(err));
 
 },[]);
 
-function removeVisitor(id){
-  console.log("In removeVisitor"+id);
-  Axios.delete('http://localhost:8080/visitors/'+id,
+function removeTicket(id){
+  console.log("In removeticket"+id);
+  Axios.delete('http://localhost:8080/tickets/'+id,
       {
     headers: { 
       'content-type' : 'application/json',
@@ -126,10 +125,10 @@ function addProducts(response) {
     
   }
 
-function postVisitor(visitor){
-  console.log("In postVisitor"+JSON.stringify(visitor));
-  Axios.post('http://localhost:8080/visitors/UI',
-  JSON.stringify(visitor),
+function postTicket(ticket){
+  console.log("In postTicket"+JSON.stringify(ticket));
+  Axios.post('http://localhost:8080/tickets',
+  JSON.stringify(ticket),
       {
     headers: { 
       'content-type' : 'application/json',
@@ -148,10 +147,10 @@ function postVisitor(visitor){
   console.log("state.columns:");
   if(isPostSuccess !=null){
       if(isPostSuccess == "error" ){
-         return <ErrorAddingVisitor/>;
+         return <ErrorRaiseTicket/>;
       }      
       else if(isPostSuccess == "errorRemove"){
-          return <ErrorRemovingVisitor/>;
+          return <ErrorRemovingTicket/>;
       }      
       else{
       return <Home/>;
@@ -159,7 +158,7 @@ function postVisitor(visitor){
   }
   return (
     <MaterialTable
-      title="Visitor Table"
+      title="Home Service Tickets"
       icons={tableIcons}
       columns={columns}
       data={data}
@@ -170,9 +169,9 @@ function postVisitor(visitor){
               resolve();
               const tempdata = [data];
               tempdata.push(newData);
-              console.log("added visitor:"+ newData );
+              console.log("added ticket:"+ newData );
               setDataValues(data);
-              postVisitor(newData);
+              postTicket(newData);
             }, 600);
           }),
         onRowUpdate: (newData, oldData) =>
@@ -182,7 +181,7 @@ function postVisitor(visitor){
               const tempdata = [data];
               tempdata[tempdata.indexOf(oldData)] = newData;
               setDataValues(tempdata);
-              postVisitor(newData);              
+              postTicket(newData);              
             }, 600);
           }),
         onRowDelete: oldData =>
@@ -192,7 +191,7 @@ function postVisitor(visitor){
               const tempdata = [data];
               tempdata.splice(tempdata.indexOf(oldData), 1);
               setDataValues(tempdata);
-              removeVisitor(oldData.id);              
+              removeTicket(oldData.id);              
             }, 600);
           }),
       }}

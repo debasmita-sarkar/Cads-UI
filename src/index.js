@@ -7,6 +7,7 @@ import configureStore from './store/store';
 import { getInitialNotes } from './store/actions';
 import * as serviceWorker from './serviceWorker';
 import 'bootstrap/dist/css/bootstrap.css';
+
 //import 'font-awesome/css/font-awesome.min.css';
 
 const store = configureStore();
